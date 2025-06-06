@@ -34,19 +34,7 @@ scenarios:
       - get:
           url: "/api/tokens/{{ $randomString() }}"
       - think: 2
-      - get:
-          url: "/api/tokens/social/{{ $randomString() }}"
 
-  - name: "Social sentiment analysis"
-    flow:
-      - post:
-          url: "/api/analysis/sentiment"
-          json:
-            token: "{{ $randomString() }}"
-            timeframe: "24h"
-      - think: 1
-      - get:
-          url: "/api/social/trending"
 
   - name: "Market data analysis"
     flow:

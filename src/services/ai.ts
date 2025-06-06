@@ -31,10 +31,6 @@ interface MarketData extends MarketMetrics {
 
 export class AIService {
   private groq: Groq;
-  private readonly sentimentPrompts = {
-    positive: ['bullish', 'growth', 'adoption', 'partnership'],
-    negative: ['bearish', 'decline', 'risk', 'concern']
-  };
 
   constructor(config: AIServiceConfig) {
     this.groq = new Groq({
@@ -46,31 +42,6 @@ export class AIService {
     throw new Error('Method not implemented.');
   }
 
-  async analyzeSentiment(text: string): Promise<number> {
-    try {
-      const prompt = `
-        Analyze the sentiment of the following text and rate it on a scale of 0 to 1,
-        where 0 is extremely negative and 1 is extremely positive.
-        Consider market context, technical analysis terms, and crypto-specific language.
-
-        Text: "${text}"
-
-        Provide just the numerical score.
-      `;
-
-      const completion = await this.groq.chat.completions.create({
-        messages: [{ role: 'user', content: prompt }],
-        model: 'mixtral-8x7b-32768',
-        temperature: 0.3,
-      });
-
-      const score = parseFloat(completion.choices[0]?.message?.content || "0.5");
-      return isNaN(score) ? 0.5 : score;
-    } catch (error) {
-      elizaLogger.error('Error analyzing sentiment:', error);
-      return 0.5;
-    }
-  }
 
   async generateName(): Promise<string> {
     try {
@@ -297,26 +268,6 @@ export class AIService {
     );
   }
 
-  determineEngagementAction(content: string): string {
-    const sentiment = this.quickSentimentCheck(content);
-    if (sentiment > 0.7) return 'LIKE_AND_RETWEET';
-    if (sentiment > 0.4) return 'LIKE';
-    return 'NONE';
-  }
-
-  private quickSentimentCheck(content: string): number {
-    const contentLower = content.toLowerCase();
-    const positiveCount = this.sentimentPrompts.positive.filter(word => 
-      contentLower.includes(word)
-    ).length;
-    const negativeCount = this.sentimentPrompts.negative.filter(word => 
-      contentLower.includes(word)
-    ).length;
-
-    const total = positiveCount + negativeCount;
-    if (total === 0) return 0.5;
-    return positiveCount / total;
-  }
 
   private async fetchMarketData(tokenAddress: string): Promise<MarketData> {
     // Implement market data fetching logic

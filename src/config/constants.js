@@ -12,8 +12,6 @@ export var AIModel;
 })(AIModel || (AIModel = {}));
 export var SocialPlatform;
 (function (SocialPlatform) {
-    SocialPlatform["TWITTER"] = "twitter";
-    SocialPlatform["DISCORD"] = "discord";
     SocialPlatform["TELEGRAM"] = "telegram";
 })(SocialPlatform || (SocialPlatform = {}));
 export var TransactionType;

@@ -1,12 +1,12 @@
 # JENNA - Open Source Contribution Guide
 
 ## About JENNA
-JENNA (Social Onchain Intelligence Agent) is an advanced AI system built for the Solana ecosystem, combining social intelligence with decentralized trading capabilities. We welcome community contributions to help improve and evolve the project.
+JENNA is an advanced AI system built for the Solana ecosystem, focusing on on-chain data analysis and automated trading. We welcome community contributions to help improve and evolve the project.
 # 🌟 Project Overview
-- AI Engine: Social intelligence and trading analysis
+- AI Engine: On-chain market analysis and automated trading
 - Trading System: Jupiter Protocol integration
 - Portfolio Analytics: Wallet tracking and performance metrics
-- Social Layer: Twitter integration and sentiment analysis
+- Social Layer: Twitter integration
 - Market Analysis: Real-time data processing and visualization
 ## 🎯 Priority Features & Improvements
 
@@ -26,7 +26,6 @@ JENNA (Social Onchain Intelligence Agent) is an advanced AI system built for the
 
 #### 3. Social Intelligence Engine
 - Implement advanced Twitter API integration
-- Add sentiment analysis for market correlation
 - Create engagement metrics system
 - Develop content generation system
 
@@ -89,7 +88,6 @@ JENNA (Social Onchain Intelligence Agent) is an advanced AI system built for the
 5. Tax reporting integration
 
 ### Social Intelligence Features
-1. Automated market sentiment analysis
 2. Social engagement optimization
 3. Content generation system
 4. Community interaction metrics

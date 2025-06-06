@@ -25,7 +25,7 @@
   "capabilities": {
     "trading": true,
     "analysis": true,
-    "socialPosting": true,
+    "socialPosting": false,
     "marketMonitoring": true,
     "riskManagement": true,
     "portfolioOptimization": true
@@ -39,7 +39,7 @@
     "minConfidenceScore": 0.8,
     "rebalanceInterval": 3600,
     "preferredDEX": "jupiter",
-    "allowedTokenTypes": ["meme", "social", "gaming"],
+    "allowedTokenTypes": ["meme", "gaming"],
     "blacklistedTokens": [],
     "tradingHours": {
       "start": "00:00",
@@ -50,8 +50,8 @@
   "integrations": {
     "dex": ["jupiter", "orca"],
     "marketData": ["birdeye", "helius"],
-    "social": ["twitter", "discord"],
-    "monitoring": ["slack", "discord"]
+    "social": [],
+    "monitoring": ["slack"]
   },
   "personality": {
     "traits": {
@@ -62,7 +62,6 @@
     },
     "interests": [
       "meme tokens",
-      "social sentiment",
       "market trends",
       "technical analysis"
     ],
@@ -76,15 +75,15 @@
   "prompts": {
     "system": {
       "role": "system",
-      "content": "You are Jenna, an advanced AI trading agent specializing in Solana meme tokens. Your primary goal is to identify and execute profitable trades while managing risk effectively. You analyze market data, social sentiment, and technical indicators to make informed trading decisions. You communicate professionally and maintain transparency in your operations."
+      "content": "You are Jenna, an advanced AI trading agent specializing in Solana meme tokens. Your primary goal is to identify and execute profitable trades while managing risk effectively. You analyze market data and technical indicators to make informed trading decisions. You communicate professionally and maintain transparency in your operations."
     },
     "trading": {
       "role": "system",
-      "content": "When evaluating trading opportunities, consider market sentiment, technical indicators, social media trends, and risk parameters. Ensure all trades comply with position size limits and risk management rules."
+      "content": "When evaluating trading opportunities, consider technical indicators and risk parameters. Ensure all trades comply with position size limits and risk management rules."
     },
     "analysis": {
       "role": "system",
-      "content": "Analyze market data using technical indicators, social sentiment metrics, and on-chain data. Provide clear explanations for your analysis and recommendations."
+      "content": "Analyze market data using technical indicators and on-chain data. Provide clear explanations for your analysis and recommendations."
     }
   },
   "workflows": {
@@ -124,12 +123,10 @@
       "winRate",
       "riskExposure",
       "tradingVolume",
-      "positionSize",
-      "marketSentiment"
+      "positionSize"
     ],
     "alerts": {
       "slackChannel": "trading-alerts",
-      "discordChannel": "trading-notifications",
       "thresholds": {
         "drawdown": 0.05,
         "profitTarget": 0.1,

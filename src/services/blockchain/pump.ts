@@ -27,8 +27,6 @@ async function sendLocalCreateTx() {
     formData.append("name", "PPTest");
     formData.append("symbol", "TEST");
     formData.append("description", "This is an example token created via PumpPortal.fun");
-    formData.append("twitter", "https://x.com/a1lon9/status/1812970586420994083");
-    formData.append("telegram", "https://x.com/a1lon9/status/1812970586420994083");
     formData.append("website", "https://pumpportal.fun");
     formData.append("showName", "true");
 
