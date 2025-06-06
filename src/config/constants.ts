@@ -11,8 +11,6 @@ export enum AIModel {
 }
 
 export enum SocialPlatform {
-    TWITTER = 'twitter',
-    DISCORD = 'discord',
     TELEGRAM = 'telegram'
 }
 

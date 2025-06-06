@@ -19,10 +19,6 @@ meme-agent/
 │   │   │   ├── tweetGenerator.ts # Tweet Content Generation
 │   │   │   ├── types.ts         # AI Service Type Definitions
 │   │   │   └── personality.ts   # Character-based Generation
-│   │   ├── social/              # Social Media Integration
-│   │   │   ├── twitter.ts       # Twitter API Integration
-│   │   │   ├── MarketTweetCron.ts # Automated Market Updates
-│   │   │   └── agentTwitterClient.ts # Twitter Client Implementation
 │   │   ├── analysis/            # Analysis Services
 │   │   │   ├── market-analysis.ts # Market Data Processing
 │   │   │   └── transaction-analysis.ts # Transaction Analysis
@@ -47,36 +43,12 @@ meme-agent/
 ├── tests/                      # Test Suites
 │   ├── unit/                  # Unit Tests
 │   │   └── services/
-│   │       └── social/        # Twitter Service Tests
 │   └── integration/           # Integration Tests
 ├── logs/                      # Application Logs
-│   ├── social.log            # Social Media Integration Logs
 │   └── market.log           # Market Analysis Logs
 └── scripts/                  # Utility Scripts
 ```
 
-#### Key Components for Twitter Integration
-
-1. **Tweet Generation Pipeline**
-   - `src/services/ai/tweetGenerator.ts`: Core tweet generation logic
-   - `src/services/ai/personality.ts`: Character-based content adaptation
-   - `src/services/social/MarketTweetCron.ts`: Automated market updates
-
-2. **Twitter Service Implementation**
-   - `src/services/social/twitter.ts`: Main Twitter service
-   - `src/services/social/agentTwitterClient.ts`: Twitter API client
-   - `src/middleware/rateLimit.ts`: Rate limiting implementation
-
-3. **Character System Integration**
-   - `src/personality/types.ts`: Character schema definitions
-   - `src/personality/loadCharacter.ts`: Character loading logic
-   - `characters/jenna.character.json`: Character configuration
-
-4. **Market Data Integration**
-   - `src/services/analysis/market-analysis.ts`: Market data processing
-   - `src/services/blockchain/defi/tradingEngine.ts`: Trading functionality
-   - `src/services/analysis/transaction-analysis.ts`: Transaction analysis
-```
 
 ### Technology Stack
 
@@ -167,188 +139,6 @@ meme-agent/
   - Volatility metrics
   - Risk assessment
 
-### 3. Social Media Integration
-
-#### Twitter Integration Architecture
-The Twitter integration follows the elizaOS pattern, using direct authentication without API tokens for improved reliability and maintainability.
-
-```
-┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
-│   AI Service    │     │  Tweet Service  │     │  Market Data    │
-│ (tweetGenerator)│────▶│   (twitter.ts)  │◀────│   Services      │
-└────────┬────────┘     └────────┬────────┘     └────────┬────────┘
-         │                       │                       │
-         ▼                       ▼                       ▼
-┌─────────────────────────────────────────────────────────────────┐
-│                    Character Configuration                       │
-│              (personality & engagement settings)                 │
-└─────────────────────────────────────────────────────────────────┘
-```
-
-#### Core Components
-
-1. **Twitter Authentication Service** (`src/services/social/twitter.ts`)
-   ```typescript
-   interface TwitterAuthService {
-     initialize(config: TwitterConfig): Promise<void>;
-     authenticate(): Promise<AuthResult>;
-     validateSession(): Promise<boolean>;
-     handleAuthError(error: AuthError): Promise<void>;
-   }
-   
-   interface TwitterConfig {
-     username: string;        // Twitter account username
-     password: string;        // Twitter account password
-     email: string;          // Twitter account email
-     mockMode?: boolean;     // Enable mock mode for development
-     maxRetries?: number;    // Maximum authentication retries
-     retryDelay?: number;    // Delay between retries (ms)
-   }
-   ```
-
-   **Authentication Flow:**
-   1. Environment Variable Loading:
-      ```typescript
-      class TwitterAuthManager {
-        private loadCredentials(): TwitterConfig {
-          return {
-            username: process.env.TWITTER_USERNAME,
-            password: process.env.TWITTER_PASSWORD,
-            email: process.env.TWITTER_EMAIL,
-            mockMode: process.env.TWITTER_MOCK_MODE === 'true',
-            maxRetries: parseInt(process.env.TWITTER_MAX_RETRIES || '3'),
-            retryDelay: parseInt(process.env.TWITTER_RETRY_DELAY || '5000')
-          };
-        }
-      }
-      ```
-
-   2. Session Management:
-      ```typescript
-      interface SessionManager {
-        initializeSession(): Promise<void>;
-        validateSession(): Promise<boolean>;
-        refreshSession(): Promise<void>;
-        persistCookies(cookies: Cookie[]): Promise<void>;
-      }
-      ```
-
-   3. Error Handling:
-      ```typescript
-      interface AuthErrorHandler {
-        handleACIDChallenge(): Promise<void>;  // Handle Error 399
-        handleSuspiciousLogin(): Promise<void>;
-        implementRetryStrategy(): Promise<void>;
-      }
-      ```
-
-2. **Content Generation Service** (`src/services/ai/tweetGenerator.ts`)
-   ```typescript
-   interface TweetGenerator {
-     generateMarketTweet(data: MarketData): Promise<string>;
-     generateEngagementResponse(context: Context): Promise<string>;
-     validateContent(tweet: string): Promise<ValidationResult>;
-   }
-
-   interface ContentRules {
-     maxEmojis: 0;              // No emojis allowed
-     maxHashtags: 0;            // No hashtags allowed
-     minInterval: 300000;       // 5-minute minimum between tweets
-     requireUnique: true;       // Ensure unique post formats
-   }
-   ```
-
-   **Content Validation:**
-   ```typescript
-   class ContentValidator {
-     private readonly rules: ContentRules = {
-       maxEmojis: 0,
-       maxHashtags: 0,
-       minInterval: 300000,
-       requireUnique: true
-     };
-
-     async validateTweet(content: string): Promise<ValidationResult> {
-       // Ensure no emojis
-       if (this.containsEmojis(content)) {
-         return { valid: false, reason: 'Contains emojis' };
-       }
-
-       // Ensure no hashtags
-       if (this.containsHashtags(content)) {
-         return { valid: false, reason: 'Contains hashtags' };
-       }
-
-       // Check uniqueness
-       if (!await this.isUniqueFormat(content)) {
-         return { valid: false, reason: 'Similar format exists' };
-       }
-
-       return { valid: true };
-     }
-   }
-   ```
-
-3. **Rate Limiting Service**
-   ```typescript
-   interface RateLimitManager {
-     checkLimit(action: TwitterAction): Promise<boolean>;
-     trackRequest(action: TwitterAction): void;
-     getRemainingQuota(): RateLimit;
-   }
-
-   class TwitterRateLimiter implements RateLimitManager {
-     private readonly limits = {
-       tweets: { window: 900000, max: 300 },      // 15-minute window
-       engagements: { window: 600000, max: 1000 } // 10-minute window
-     };
-   }
-   ```
-
-#### Service Interactions
-
-1. **Market Update Pipeline**
-   ```
-   Market Data Collection → Data Validation → Content Generation → Spam Check → Post
-   [Jupiter/Helius] → [Validator] → [TweetGenerator] → [ContentRules] → [Twitter]
-   ```
-
-2. **Authentication Pipeline**
-   ```
-   Load Credentials → Session Check → Auth Flow → Cookie Management → Ready
-   [.env] → [Validator] → [AuthService] → [SessionManager] → [TwitterService]
-   ```
-
-3. **Error Recovery Flow**
-   ```
-   Error Detection → Classification → Retry Strategy → Session Refresh → Resume
-   [Monitor] → [ErrorHandler] → [RetryService] → [SessionManager] → [Service]
-   ```
-
-#### Integration Features
-- **Data Collection**
-  - Twitter authentication & session management
-  - Rate limit handling
-  - Mock mode fallback
-  - Cookie-based persistence
-
-- **Analysis Pipeline**
-  - Market sentiment analysis
-  - Tweet content validation
-  - Character-aware generation
-  - Response optimization
-
-- **Engagement System**
-  - Real-time monitoring
-  - Context-aware responses
-  - Personality consistency
-  - Rate limit awareness
-
-- **Automated Actions**
-  - Market updates
-  - Trading signals
-  - Community engagement
-  - Performance reporting
 
 ### 4. AI-Powered Trading
 - **Decision Engine**
@@ -488,25 +278,6 @@ interface ModelFallback {
 - Latency monitoring
 - Error recovery
 
-**Twitter Content Generation:**
-```typescript
-interface TweetValidation {
-  maxLength: number;
-  contentRules: {
-    noEmojis: boolean;
-    noHashtags: boolean;
-    requireUnique: boolean;
-  };
-  retryConfig: {
-    maxAttempts: number;
-    backoffMs: number;
-  };
-}
-```
-- Character-aware generation
-- Market data integration
-- Content validation
-- Rate limit management
 
 ### 2. Transaction Processing
 **Issues & Solutions:**

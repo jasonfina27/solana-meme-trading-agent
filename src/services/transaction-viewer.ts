@@ -30,7 +30,6 @@ interface TokenInfo {
   decimals: number;
   totalSupply: string;
   holders: number;
-  twitter?: string;
   website?: string;
   createdAt: number;
   marketCap?: number;
@@ -110,7 +109,6 @@ export class TransactionViewer {
         decimals: response.data.decimals,
         totalSupply: response.data.totalSupply,
         holders: response.data.holders,
-        twitter: response.data.twitter,
         website: response.data.website,
         createdAt: response.data.createdAt,
         marketCap: response.data.marketCap,
@@ -126,47 +124,6 @@ export class TransactionViewer {
     }
   }
 
-  async getTwitterContent(tokenSymbol: string, limit: number = 10): Promise<any[]> {
-    try {
-      const cacheKey = `twitter:${tokenSymbol}:${limit}`;
-      const cachedData = await redis.get(cacheKey);
-      
-      if (cachedData) {
-        return JSON.parse(cachedData);
-      }
-
-      const fields: TwitterFields = {
-        'tweet.fields': 'created_at,public_metrics,entities',
-        'user.fields': 'verified,public_metrics'
-      };
-
-      const response = await axios.get(`https://api.twitter.com/2/tweets/search/recent`, {
-        params: {
-          query: `${tokenSymbol} (is:verified OR has:links)`,
-          max_results: limit,
-          ...fields,
-          expansions: 'author_id'
-        },
-        headers: {
-          'Authorization': `Bearer ${process.env.TWITTER_BEARER_TOKEN}`
-        }
-      });
-
-      const tweets = response.data.data.map((tweet: any) => ({
-        id: tweet.id,
-        text: tweet.text,
-        createdAt: tweet.created_at,
-        metrics: tweet.public_metrics,
-        author: response.data.includes.users.find((user: any) => user.id === tweet.author_id)
-      }));
-
-      await redis.setex(cacheKey, 300, JSON.stringify(tweets)); // Cache for 5 minutes
-      return tweets;
-    } catch (error) {
-      this.logger.error('Error fetching Twitter content:', error);
-      throw error;
-    }
-  }
 
   private parseSwapTransaction(tx: any): SwapTransaction {
     return {

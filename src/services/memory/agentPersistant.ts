@@ -5,7 +5,6 @@ import { MemorySaver } from "@langchain/langgraph";
 import { CONFIG } from '../../config/settings.js';
 import { elizaLogger } from "@ai16z/eliza";
 import Groq from "groq-sdk";
-import { TwitterService } from '../social/twitter.js';
 import { AIService } from '../ai.js';
 import { TradingService } from '../blockchain/trading.js';
 import { JupiterPriceV2Service } from '../blockchain/defi/JupiterPriceV2Service.js';
@@ -19,7 +18,7 @@ interface AgentConfig {
 interface AgentTools {
   jupiter: JupiterPriceV2Service;
   trading: TradingService;
-  twitter: TwitterService;
+  // previously used social media services removed
 }
 
 export class PersistentAgent {
@@ -86,13 +85,10 @@ export class PersistentAgent {
         // Generate AI content based on market data
         const content = await this.aiService.generateResponse({
           content: `Market Update: ${JSON.stringify(marketAnalysis)}`,
-          platform: 'twitter',
+          platform: 'default',
           author: '',
           messageId: ''
         });
-
-        // Post to Twitter
-        await this.tools.twitter.tweet(content, {});
 
         // Log success and wait for next interval
         elizaLogger.success('Autonomous action completed successfully');
@@ -163,7 +159,7 @@ export class PersistentAgent {
     while (true) {
       console.log('\nAvailable modes:');
       console.log('1. chat    - Interactive chat mode');
-      console.log('2. auto    - Autonomous trading & social mode');
+      console.log('2. auto    - Autonomous trading mode');
 
       const choice = await new Promise<string>(resolve => {
         rl.question('\nChoose mode (enter number or name): ', resolve);

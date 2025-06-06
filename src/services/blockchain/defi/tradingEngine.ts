@@ -7,7 +7,6 @@ import JSBI from 'jsbi';
 import axios from 'axios';
 import { VolatilityManager } from '../../market/volatility/VolatilityManager.js';
 import { MarketDataProcessor } from '../../market/data/DataProcessor';
-import { MarketSentimentAnalyzer, SentimentSource } from '../../market/signals/marketSentiment.js';
 import { retry } from '../../../utils/common.js';
 import { JupiterPriceV2 } from './jupiterPriceV2.js';
 import { AMMHealthChecker } from './ammHealth.js';
@@ -96,7 +95,6 @@ export class TradingEngine extends EventEmitter {
     ORCA: 'https://api.orca.so',
     RAYDIUM: 'https://api.raydium.io/v2'
   };
-  private sentimentAnalyzer: MarketSentimentAnalyzer;
   private openPositions: Map<string, Position> = new Map();
   private readonly DEFAULT_STOP_LOSS = 0.05; // 5% default stop loss
   private readonly MAX_POSITION_SIZE = 0.1; // 10% of total portfolio
@@ -107,7 +105,6 @@ export class TradingEngine extends EventEmitter {
     connection: Connection,
     jupiter: Jupiter,
     config: TradeConfig,
-    sentimentAnalyzer: MarketSentimentAnalyzer,
     wallet: Keypair
   ) {
     super();
@@ -132,7 +129,6 @@ export class TradingEngine extends EventEmitter {
     const publicKeyString = process.env.SOLANA_PUBLIC_KEY!; // Use public key from .env
     this.dataProcessor = new MarketDataProcessor(heliusApiKey, 'https://tokens.jup.ag/tokens?tags=verified', publicKeyString);
     this.volatilityManager = new VolatilityManager(this.dataProcessor);
-    this.sentimentAnalyzer = sentimentAnalyzer;
     this.jupiterPriceV2 = new JupiterPriceV2();
     this.ammHealthChecker = new AMMHealthChecker();
   }
@@ -142,24 +138,6 @@ export class TradingEngine extends EventEmitter {
       // Validate trade parameters
       this.validateTradeParams(params);
 
-      // Check market sentiment
-      const analysis = await this.sentimentAnalyzer.analyzeSentiment({
-        sources: [SentimentSource.TRADING, SentimentSource.SOCIAL, SentimentSource.NEWS],
-        confidenceThreshold: 0.6,
-        timeRange: {
-          start: Date.now() - 24 * 60 * 60 * 1000, // Last 24 hours
-          end: Date.now()
-        }
-      });
-      const sentiment = analysis.overall;
-      
-      // Adjust trade amount based on sentiment
-      if (sentiment < -0.5) {
-        console.log('Negative market sentiment detected, reducing position size');
-        params.amount *= 0.5;
-      } else if (sentiment > 0.5) {
-        console.log('Positive market sentiment detected, maintaining position size');
-      }
 
       // Get best route
       const route = await this.findBestRoute(params);

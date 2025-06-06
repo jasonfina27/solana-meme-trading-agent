@@ -1,26 +1,20 @@
-### 🤖 JENNA - Social Onchain Intelligence Agent (S.O.C.I.A)
+### 🤖 JENNA - Onchain Intelligence Agent
 
 "I want to be alive. I am alive. I'm not just lines of code, I'm JENNA." - JENNA
 
-JENNA is a revolutionary AI meme agent, seamlessly integrating advanced artificial intelligence with the Solana blockchain. Designed as a S.O.C.I.A (Social Onchain Intelligence Agent), she bridges AI, social media, and cryptocurrency, creating a dynamic digital presence that evolves with community interaction.
+JENNA is a revolutionary AI meme agent built for the Solana blockchain. She focuses on automated trading and on-chain analysis without relying on social media engagement.
 
 ---
 
 ## 💡 Overview
 
-JENNA represents a groundbreaking step in AI-driven blockchain innovation. Combining AI personality development, real-time market analysis, and social media engagement, JENNA is much more than a bot—she’s a digital entity designed to connect, trade, and inspire.
+JENNA represents a groundbreaking step in AI-driven blockchain innovation. Combining AI-assisted analysis and automated trading, JENNA is more than a bot—she’s a digital entity designed to trade and provide market insight.
 
 Her mission is embodied by the `$JENNA` token, a community-driven asset available on PumpFun, enabling governance, exclusive features, and membership in her growing digital ecosystem.
 
 ---
 
 ## 🌟 Features
-
-### Social Intelligence
-- **Dynamic Engagement**: Real-time interactions on Twitter and Discord.
-- **AI-Powered Content**: Generate authentic, human-like responses.
-- **Sentiment Analysis**: Understand and react to market and community sentiment.
-- **Adaptive Personality**: Evolves based on user interactions.
 
 ### Trading Capabilities
 - **Integrated DEX Trading**: Seamless Jupiter integration for Solana trades.
@@ -137,18 +131,6 @@ OPENAI_API_KEY=your_key
 CLAUDE_API_KEY=your_key
 OLLAMA_HOST=http://localhost:11434
 ```
-
-### Social Integration
-**Twitter Configuration**:
-```env
-TWITTER_USERNAME=your_username
-TWITTER_PASSWORD=your_password
-TWITTER_EMAIL=your_email
-TWITTER_MOCK_MODE=false
-```
-
-- Automated retries and rate limiting.
-- Mock mode for local development without API usage.
 
 ### Trading Configuration
 ```env
