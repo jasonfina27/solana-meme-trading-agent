@@ -54,7 +54,6 @@ export interface SystemPrompts {
     MARKET_ANALYSIS: {
         BASIC: string;
         TECHNICAL: string;
-        SENTIMENT: string;
     };
     TRADE_DECISION: {
         ENTRY: string;
@@ -62,7 +61,6 @@ export interface SystemPrompts {
         RISK: string;
     };
     CONTENT_GENERATION: {
-        TWEET: string;
         REPORT: string;
         ALERT: string;
     };
@@ -184,22 +182,6 @@ export const CONFIG = {
         }
     },
 
-    SOCIAL: {
-        TWITTER: {
-            tokens: {
-                appKey: process.env.TWITTER_API_KEY || '',
-                appSecret: process.env.TWITTER_API_SECRET || '',
-                accessToken: process.env.TWITTER_ACCESS_TOKEN || '',
-                accessSecret: process.env.TWITTER_ACCESS_SECRET || '',
-                bearerToken: process.env.TWITTER_BEARER_TOKEN || ''
-            },
-            POSTING: {
-                MIN_INTERVAL: parseInt(process.env.TWEET_MIN_INTERVAL || '300000', 10),
-                MAX_DAILY_TWEETS: parseInt(process.env.MAX_DAILY_TWEETS || '48', 10),
-                PRICE_CHANGE_THRESHOLD: parseFloat(process.env.TWEET_PRICE_CHANGE_THRESHOLD || '0.05')
-            }
-        }
-    },
 
     AUTOMATION: {
         ENABLED: process.env.AUTOMATION_ENABLED === 'true',
@@ -256,11 +238,6 @@ Provide key insights and trends.`,
 - Resistance: {{resistance}}
 - Indicators: {{indicators}}
 Identify trading opportunities.`,
-            SENTIMENT: `Evaluate market sentiment:
-- Social signals: {{social}}
-- News impact: {{news}}
-- Trader sentiment: {{sentiment}}
-Assess overall market mood.`
         },
         
         TRADE_DECISION: {
@@ -280,13 +257,7 @@ Suggest exit strategy.`,
 - Volatility risk: {{volatility}}
 Provide risk management advice.`
         },
-
-        CONTENT_GENERATION: {
-            TWEET: `Create market update tweet:
-- Token: {{token}}
-- Metrics: {{metrics}}
-- Highlight: {{highlight}}
-Generate viral content.`,
+CONTENT_GENERATION: {
             REPORT: `Generate market report:
 - Overview: {{overview}}
 - Analysis: {{analysis}}

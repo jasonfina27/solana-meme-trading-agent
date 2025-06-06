@@ -68,8 +68,7 @@
         "analysis": {
           "depth": 0.7,
           "technical_weight": 0.6,
-          "sentiment_weight": 0.4,
-          "components": ["price", "volume", "momentum", "sentiment"]
+          "components": ["price", "volume", "momentum"]
         },
         "engagement": {
           "reply_rate": 0.8,
@@ -93,10 +92,6 @@
               "weight": 0.3,
               "indicators": ["ma", "momentum", "volume"]
             },
-            "sentiment": {
-              "weight": 0.3,
-              "sources": ["social", "news", "onchain"]
-            }
           }
         },
         "liquidity": {
@@ -178,7 +173,6 @@
       "performance_based": {
         "metrics": [
           "engagement_rate",
-          "sentiment_score",
           "influence_growth",
           "trading_success"
         ],

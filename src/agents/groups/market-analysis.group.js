@@ -28,17 +28,6 @@ export const marketAnalysisGroup = {
             temperature: 0.5,
             minConfidence: 0.9
         },
-        {
-            id: 'sentiment-analyzer',
-            name: 'Market Sentiment Analyzer',
-            model: 'deepseek-coder-33b-instruct',
-            prompt: deepseekPrompt, // TODO: Add sentiment analysis prompt
-            role: 'SENTIMENT_ANALYZER',
-            priority: 3,
-            maxConcurrentTasks: 4,
-            timeoutMs: 15000,
-            temperature: 0.6,
-            minConfidence: 0.7
         }
     ],
     workflow: {
@@ -57,13 +46,6 @@ export const marketAnalysisGroup = {
                 requiredConfidence: 0.9,
                 timeoutMs: 20000,
                 retryCount: 1
-            },
-            {
-                name: 'Sentiment Analysis',
-                agents: ['sentiment-analyzer'],
-                requiredConfidence: 0.7,
-                timeoutMs: 15000,
-                retryCount: 2
             },
             {
                 name: 'Final Decision',
@@ -178,7 +160,6 @@ export class MarketAnalysisCoordinator {
         const finalResults = {
             marketAnalysis: this.analysisResults.get('Market Data Analysis'),
             riskAssessment: this.analysisResults.get('Risk Assessment'),
-            sentimentAnalysis: this.analysisResults.get('Sentiment Analysis'),
             finalDecision: this.analysisResults.get('Final Decision')
         };
         return {

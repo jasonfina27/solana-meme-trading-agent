@@ -48,11 +48,7 @@ export class PersistentAgent {
   private validateEnvironment(): void {
     const requiredVars = [
       'GROQ_API_KEY',
-      'POSTGRES_URL',
-      'TWITTER_API_KEY',
-      'TWITTER_API_SECRET',
-      'TWITTER_ACCESS_TOKEN',
-      'TWITTER_ACCESS_SECRET'
+      'POSTGRES_URL'
     ];
 
     const missingVars = requiredVars.filter(varName => !process.env[varName]);

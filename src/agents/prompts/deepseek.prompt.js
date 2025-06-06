@@ -24,9 +24,8 @@ Guidelines:
     userPrompt: `Please analyze the provided market data and:
 1. Identify key patterns and trends
 2. Calculate relevant technical indicators
-3. Assess market sentiment
-4. Provide a clear recommendation with confidence level
-5. Explain your reasoning and risk factors`,
+3. Provide a clear recommendation with confidence level
+4. Explain your reasoning and risk factors`,
     examples: [
         {
             input: "Market shows increasing volume with price consolidation",

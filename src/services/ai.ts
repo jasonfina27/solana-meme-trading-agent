@@ -108,12 +108,10 @@ export class AIService {
         Consider:
         1. Price action and volatility
         2. Volume patterns
-        3. Market sentiment
-        4. Risk factors
+        3. Risk factors
 
         Format the response as JSON with the following structure:
         {
-          "sentiment": "BULLISH/BEARISH/NEUTRAL",
           "confidence": 0-1,
           "shouldTrade": boolean,
           "action": "BUY/SELL/HOLD",
@@ -137,7 +135,6 @@ export class AIService {
       
       return {
         summary: "Market analysis summary",
-        sentiment: analysis.sentiment || "NEUTRAL",
         keyPoints: [],
         recommendation: null,
         confidence: analysis.confidence || 0.5,
@@ -160,7 +157,6 @@ export class AIService {
       elizaLogger.error('Error analyzing market:', error);
       return {
         summary: "Error analyzing market",
-        sentiment: "NEUTRAL",
         keyPoints: [],
         recommendation: null,
         confidence: 0,
@@ -212,37 +208,6 @@ export class AIService {
     }
   }
 
-  async generateMarketUpdate(context: MarketContext): Promise<string> {
-    try {
-      const tokenData = context.tokens.map(token => 
-        `${token.symbol}: $${token.price} (${token.priceChange24h}% 24h)`
-      ).join('\n');
-
-      const prompt = `
-        Create a market update tweet based on the following data:
-        ${tokenData}
-
-        Requirements:
-        - Professional and informative tone
-        - Highlight significant price movements
-        - Include relevant market context
-        - Maximum 280 characters
-        - Use appropriate emojis sparingly
-        ${context.isAlert ? '- Emphasize urgency and importance' : ''}
-      `;
-
-      const completion = await this.groq.chat.completions.create({
-        messages: [{ role: 'user', content: prompt }],
-        model: 'mixtral-8x7b-32768',
-        temperature: 0.7,
-      });
-
-      return completion.choices[0]?.message?.content?.trim() || "";
-    } catch (error) {
-      elizaLogger.error('Error generating market update:', error);
-      return this.generateFallbackUpdate(context.tokens);
-    }
-  }
 
   private generateFallbackUpdate(tokens: any[]): string {
     const updates = tokens.map(token => 

@@ -38,7 +38,6 @@ export interface WalletService {
 
   export interface MarketAnalysis {
     summary: string;
-    sentiment: string;
     keyPoints: never[];
     recommendation: null;
     shouldTrade: boolean;
