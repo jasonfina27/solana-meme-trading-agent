@@ -7,8 +7,6 @@ export var CommandType;
     CommandType["MARKET"] = "market";
     CommandType["ANALYZE"] = "analyze";
     CommandType["TRADE"] = "trade";
-    CommandType["TWEET"] = "tweet";
-    CommandType["THREAD"] = "thread";
     CommandType["AUTO"] = "auto";
     CommandType["STATUS"] = "status";
     CommandType["HELP"] = "help";
@@ -40,9 +38,6 @@ export class Parser {
                     return this.parseMarketCommand(commandType, parts.slice(1));
                 case CommandType.TRADE:
                     return this.parseTradeCommand(parts.slice(1));
-                case CommandType.TWEET:
-                case CommandType.THREAD:
-                    return this.parseSocialCommand(commandType, parts.slice(1));
                 case CommandType.AUTO:
                     return this.parseAutoCommand(parts.slice(1));
                 case CommandType.STATUS:
@@ -97,22 +92,6 @@ export class Parser {
                 amount,
                 slippage: options.slippage || CONFIG.SOLANA.TRADING.SLIPPAGE,
                 options
-            },
-            raw: args.join(' ')
-        };
-    }
-    /**
-     * Parse social media commands
-     */
-    static parseSocialCommand(type, args) {
-        const content = args.join(' ');
-        if (!content)
-            throw new Error('Content is required for social commands');
-        return {
-            type,
-            args: {
-                content,
-                images: this.extractUrls(content)
             },
             raw: args.join(' ')
         };

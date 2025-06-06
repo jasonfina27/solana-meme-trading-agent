@@ -4,17 +4,6 @@ export class AIService {
     constructor(config) {
         this.config = config;
     }
-    async analyzeSentiment(text) {
-        try {
-            // Implement sentiment analysis logic
-            // Return a number between 0 and 1
-            return 0.7;
-        }
-        catch (error) {
-            console.error('Error analyzing sentiment:', error);
-            return 0;
-        }
-    }
     async generateName() {
         try {
             // Implement AI logic to generate a token name
@@ -72,19 +61,6 @@ export class AIService {
             console.error('Error generating response:', error);
             return "";
         }
-    }
-    generateMarketUpdate() {
-        // Implement AI logic to generate market update
-        return {
-            shouldTrade: true,
-            confidence: 0.9,
-            action: 'BUY',
-            metrics: {
-                price: 100,
-                volume24h: 1000,
-                marketCap: 1000000
-            }
-        };
     }
     shouldEngageWithContent(content) {
         // Implement AI logic to determine if it should engage with content

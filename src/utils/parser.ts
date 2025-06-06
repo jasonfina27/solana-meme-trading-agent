@@ -7,8 +7,6 @@ export enum CommandType {
     MARKET = 'market',
     ANALYZE = 'analyze',
     TRADE = 'trade',
-    TWEET = 'tweet',
-    THREAD = 'thread',
     AUTO = 'auto',
     STATUS = 'status',
     HELP = 'help'
@@ -90,9 +88,6 @@ export class Parser {
                 case CommandType.TRADE:
                     return this.parseTradeCommand(parts.slice(1));
                     
-                case CommandType.TWEET:
-                case CommandType.THREAD:
-                    return this.parseSocialCommand(commandType, parts.slice(1));
                     
                 case CommandType.AUTO:
                     return this.parseAutoCommand(parts.slice(1));
@@ -160,22 +155,6 @@ export class Parser {
         };
     }
 
-    /**
-     * Parse social media commands
-     */
-    private static parseSocialCommand(type: CommandType, args: string[]): ParsedCommand {
-        const content = args.join(' ');
-        if (!content) throw new Error('Content is required for social commands');
-
-        return {
-            type,
-            args: {
-                content,
-                images: this.extractUrls(content)
-            },
-            raw: args.join(' ')
-        };
-    }
 
     /**
      * Parse automation commands

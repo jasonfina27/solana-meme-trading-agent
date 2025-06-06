@@ -37,10 +37,6 @@ interface TokenInfo {
   volume24h?: number;
 }
 
-interface TwitterFields {
-  'tweet.fields': string;
-  'user.fields': string;
-}
 
 export class TransactionViewer {
   private connection: Connection;

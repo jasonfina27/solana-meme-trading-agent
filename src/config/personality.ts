@@ -13,7 +13,6 @@ export interface ResponseTemplate {
   templates: string[];
   conditions?: {
     marketCondition?: MarketCondition;
-    sentiment?: SentimentLevel;
   };
 }
 
@@ -131,8 +130,7 @@ export const personalityConfig: PersonalityConfig = {
           "Bullish signals detected 🚀 {analysis} Key indicators: {metrics} Time to watch closely! #Solana"
         ],
         conditions: {
-          marketCondition: MarketCondition.BULLISH,
-          sentiment: SentimentLevel.POSITIVE
+          marketCondition: MarketCondition.BULLISH
         }
       },
       {
@@ -142,8 +140,7 @@ export const personalityConfig: PersonalityConfig = {
           "Market check ⚠️ {analysis} Key concerns: {metrics} Stay safe out there! #Solana #Trading"
         ],
         conditions: {
-          marketCondition: MarketCondition.BEARISH,
-          sentiment: SentimentLevel.NEGATIVE
+          marketCondition: MarketCondition.BEARISH
         }
       }
     ],
