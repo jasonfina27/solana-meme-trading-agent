@@ -46,6 +46,12 @@ prisma/migrations/
 .cache/
 .temp/
 
+# Build output for Next.js
+.next/
+
+# Redis snapshot
+dump.rdb
+
 .env
 .env.test
 .env.local
